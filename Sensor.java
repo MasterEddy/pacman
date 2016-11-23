@@ -6,6 +6,7 @@ import sim.util.Bag;
 import sim.util.Double2D;
 import sim.util.MutableDouble2D;
 
+// Doofes Kommentar
 
 /**
  * Sensor class. This class is initialized with the new Pac. Each step it gets the new position of the Pac and can therefore
