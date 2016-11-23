@@ -11,6 +11,8 @@ import sim.engine.Stoppable;
 import sim.util.Bag;
 import sim.util.Double2D;
 
+// Gold pac is best pac!
+
 /* The Pac is the Pac Man in the game.  Pac is an Agent and is also Steppable.  The Pac moves first, then the ghosts. */
 
 public class Pac extends Agent implements Steppable
