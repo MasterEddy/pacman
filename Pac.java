@@ -11,8 +11,6 @@ import sim.engine.Stoppable;
 import sim.util.Bag;
 import sim.util.Double2D;
 
-// Gold pac is best pac!
-
 /* The Pac is the Pac Man in the game.  Pac is an Agent and is also Steppable.  The Pac moves first, then the ghosts. */
 
 public class Pac extends Agent implements Steppable
@@ -69,7 +67,7 @@ public class Pac extends Agent implements Steppable
 	{	
 		sensor.setPositionPacX(positionPacX);
 		sensor.setPositionPacY(positionPacY);
-		
+
 		//Gets Pac going
 		if (positionPacX == 13.5 && positionPacY == 25.0){
 			nextAction = getToGo();
@@ -121,17 +119,19 @@ public class Pac extends Agent implements Steppable
 		}
 		
 		// Counts how many possible ways Pac has. If there are only 2, Pac will continue 
-		// walking in the previously chosen direction.
-		// This stabilizes Pac, when there are no coins around him.
+		// walking in the previously chosen direction until he gets to a spot, where he can't walk through.
+		// This stabilizes Pac, when there are no coins around him.--> We get out of those "ugly spots" a lot quicker
 		int zaehler = 0;
 		i = 0;
-
+		//iterates through the array which stores the numbers which already got multiplicated with random numbers.
+		//When a number is still = 0 (means: in this direction is a wall or a ghost) it's getting counted.
 		while (i < preferredWay.length) {
 			if (preferredWay[i] == 0.0){
 				zaehler++;
 			}
 			i++;
 		}
+		//if there are at least 2 ways blocked BUT not in the direction we chose to go in the last round, Pac keeps going in this direction 
 		if (zaehler > 1 && preferredWay[nextAction] > 0) {
 			return lastAction;
 		}
@@ -195,7 +195,7 @@ public class Pac extends Agent implements Steppable
 		doPolicyStep(state);
 		// now maybe we eat a dot or energizer...
 
-		Bag nearby = pacman.dots.getNeighborsWithinDistance(new Double2D(location), 0.3);  // 0.3 seems reasonable.  We gotta be right on top anyway
+		Bag nearby = pacman.dots.getNeighborsWithinDistance(new Double2D(location), 0.3);  //0.3 seems reasonable.  We gotta be right on top anyway
 		for(int i=0; i < nearby.numObjs; i++)
 		{
 			Object obj = nearby.objs[i];
