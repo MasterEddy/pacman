@@ -21,6 +21,18 @@ public class Sensor {
 	public int positionPacX;
 	public int positionPacY;
 	
+	//We want to get Pacs X position in the Pac.class. For example in the forcePacToGo-Method.
+	public int getPositionPacX() {
+		return positionPacX;
+	}
+
+	//We want to get Pacs Y position in the Pac.class. For example in the forcePacToGo-Method.
+	public int getPositionPacY() {
+		return positionPacY;
+	}
+
+
+	
 	PacMan pacman;
 	
 	
@@ -30,14 +42,20 @@ public class Sensor {
 	//0 = the spot hasn't been discovered yet ---- 1 = There was a wall at this spot ----- 2 = There was a Steppable Path
 	//because of the header and footer of the maze, the relevant informtion about the maze is stored in the rows (X-dimension) 3 - 31
 	//At the Moment (24.11.16) the Array loses the stored Information, when Pac gets killed
-	public int [][] sensEnv = new int [35] [28];
+	public int [][] sensEnv = new int [28] [35];
 	
+	public int[][] getSensEnv() {
+		return sensEnv;
+	}
+
+
 	/**
 	 * Function for updating the X position of the Pac for the Sensor.
 	 * 
 	 * @param positionPacX
 	 */
 	public void setPositionPacX(double positionPacX) {
+		positionPacX = Math.round(positionPacX);
 		this.positionPacX = (int) positionPacX;
 	}
 
@@ -48,6 +66,7 @@ public class Sensor {
 	 * @param positionPacY
 	 */
 	public void setPositionPacY(double positionPacY) {
+		positionPacY = Math.round(positionPacY);
 		this.positionPacY = (int) positionPacY;
 	}
 		
@@ -148,15 +167,15 @@ public class Sensor {
 		// New location in order to check one or two fields above Pac.
 		Double2D location = new Double2D(positionPacX, positionPacY - vision);
 
-		
+
 		if (vision == 1) {
 			if (umfeld[positionPacX][positionPacY - vision] == 1) { // we have a wall
 				//save in an Array, that the spot is unsteppable	
-				sensEnv [positionPacY - vision] [positionPacX] = 1;
+				sensEnv [positionPacX] [positionPacY - vision] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacY + vision] [positionPacX] = 2;
+			sensEnv [positionPacX] [positionPacY - vision] = 2;
 				
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.
@@ -206,11 +225,11 @@ public class Sensor {
 		if (vision == 1) {
 			if (umfeld[(int) location.x][positionPacY] == 1) { // we have a wall
 				//save in an Array, that the spot is unsteppable	
-				sensEnv [positionPacY] [(int) location.x] = 1;
+				sensEnv [(int) location.x] [positionPacY] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacY + vision] [(int) location.x] = 2;
+			sensEnv [(int) location.x] [positionPacY] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location	
 			// first check for the dots - they are the most liked by Pac.
@@ -250,12 +269,12 @@ public class Sensor {
 		if (vision == 1) {
 			if (umfeld[positionPacX][positionPacY + vision] == 1) { // we have a wall
 				//write in an Array, that the spot is unsteppable	
-				sensEnv [positionPacY + vision] [positionPacX] = 1;
+				sensEnv [positionPacX] [positionPacY + vision] = 1;
 
 			return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacY + vision] [positionPacX] = 2;
+			sensEnv [positionPacX] [positionPacY + vision] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.
@@ -308,11 +327,11 @@ public class Sensor {
 		if (vision == 1) {
 			if (umfeld[(int) location.x][positionPacY] == 1) { // we have a wall
 				//save in an Array, that the spot is steppable	(if we don't have a wall)
-				sensEnv [positionPacY] [(int) location.x] = 1;
+				sensEnv [(int) location.x] [positionPacY] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacY] [(int) location.x] = 2;
+			sensEnv [(int) location.x] [positionPacY] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.

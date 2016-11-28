@@ -58,7 +58,51 @@ public class Pac extends Agent implements Steppable
 	// the pac's start location
 	public Double2D getStartLocation() { return new Double2D(pacStartX, pacStartY); }
 
-
+	// Here we will check, if there are undiscovered Fields in Pacs column
+	public boolean forcePacToGo (){
+	
+		boolean result = false;
+		int [][] sensEnv = sensor.getSensEnv();
+		sensor.getPositionPacX();
+		sensor.getPositionPacY();
+		
+		//REPORT
+		
+				int xx = 0;
+				int yy = 0;
+				
+				while (yy < 35){
+					while (xx < 28){
+						System.out.print(sensEnv[xx][yy]);
+						xx++;
+					}
+				System.out.println();
+				xx=0;
+				yy++;
+				}
+			System.out.println("________________");
+				
+				
+					
+					
+		///REPORT
+		
+		int s = (int)positionPacX;
+		int z = (int)positionPacY;		
+		
+		//Check all fields in the south direction and Check, where Pac  
+		//Go down step by step and check, when Pac saw the next Wall, of if he saw an open direction
+		while (z < 34){
+			if (sensEnv[s][z + 1] == 1){
+				return result; //return 4 as direction--> we won't go south because there is a wall before there is an open space
+			} else if (sensEnv [s][z + 1] == 0){
+				return result = true;
+			}
+			z++;
+		}
+		
+		return result;
+	}
 
 	/* Default policy implementation: Pac is controlled through the joystick/keyboard
 	 * To changhe Pacs behavior derived classes should override this method
@@ -66,12 +110,21 @@ public class Pac extends Agent implements Steppable
 	protected void doPolicyStep(SimState state)
 	{	
 		sensor.setPositionPacX(positionPacX);
-		sensor.setPositionPacY(positionPacY);
-
+		sensor.setPositionPacY(positionPacY);		
+		
 		//Gets Pac going
 		if (positionPacX == 13.5 && positionPacY == 25.0){
 			nextAction = getToGo();
+		}// If Pac stands in a columm, where he recognized a steppable Path, but he didn't chose this one(So in the sensEnv Array follows a 0 after the 2).
+		//we force Pac to walk in this direction
+/*		else if (forcePacToGo()){
+			nextAction = 2; //We force Pac to go north, because the next undiscovered Path is in the northern direction..
+			System.out.println("We'll explore the south!");
+			
 		}
+	*/	
+		
+		
 		//If Pac's Position is even getToGo gets executed
 		else if (positionPacY % 1.0 == 0 && positionPacX % 1.0 == 0.0){
 			nextAction = getToGo();
