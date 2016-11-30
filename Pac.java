@@ -117,12 +117,12 @@ public class Pac extends Agent implements Steppable
 			nextAction = getToGo();
 		}// If Pac stands in a columm, where he recognized a steppable Path, but he didn't chose this one(So in the sensEnv Array follows a 0 after the 2).
 		//we force Pac to walk in this direction
-/*		else if (forcePacToGo()){
+	/*	else if (forcePacToGo()){
 			nextAction = 2; //We force Pac to go north, because the next undiscovered Path is in the northern direction..
 			System.out.println("We'll explore the south!");
 			
 		}
-	*/	
+		*/
 		
 		
 		//If Pac's Position is even getToGo gets executed
