@@ -45,7 +45,7 @@ public class Pac extends Agent implements Steppable
 	public int nextAction;
 
 	/** Creates a Pac assigned to the given tag, puts him in pacman.agents at the start location, and schedules him on the schedule. */
-	public Pac(PacMan pacman, int tag) 
+	public Pac(PacMan pacman, int tag, int[][] env) 
 	{
 		super(pacman);
 		this.tag = tag;
@@ -53,6 +53,7 @@ public class Pac extends Agent implements Steppable
 		stopper = pacman.schedule.scheduleRepeating(this, 0, 1);  // schedule at time 0
 
 		sensor = new Sensor(pacman);
+		sensor.sensEnv = env;
 	}
 
 	// the pac's start location
@@ -112,20 +113,19 @@ public class Pac extends Agent implements Steppable
 		sensor.setPositionPacX(positionPacX);
 		sensor.setPositionPacY(positionPacY);		
 		
-		//Gets Pac going
+		// Get's Pac going
 		if (positionPacX == 13.5 && positionPacY == 25.0){
 			nextAction = getToGo();
-		}// If Pac stands in a columm, where he recognized a steppable Path, but he didn't chose this one(So in the sensEnv Array follows a 0 after the 2).
-		//we force Pac to walk in this direction
-	/*	else if (forcePacToGo()){
-			nextAction = 2; //We force Pac to go north, because the next undiscovered Path is in the northern direction..
-			System.out.println("We'll explore the south!");
-			
 		}
-		*/
-		
-		
-		//If Pac's Position is even getToGo gets executed
+		// If Pac stands in a columm, where he recognized a steppable Path, but he didn't chose this one (So in the 
+		// sensEnv Array follows a 0 after the 2).
+		// We force Pac to walk in this direction
+//		else if (forcePacToGo()){
+//			nextAction = 2; //We force Pac to go north, because the next undiscovered Path is in the northern direction..
+//			System.out.println("We'll explore the south!");
+//		}
+
+		// If Pac's Position is even getToGo gets executed
 		else if (positionPacY % 1.0 == 0 && positionPacX % 1.0 == 0.0){
 			nextAction = getToGo();
 		} else {
@@ -413,7 +413,7 @@ public class Pac extends Agent implements Steppable
 		pacman.schedule.scheduleOnceIn(WAIT_TIME * 2 + SPIN_TIME,
 				new Steppable()
 		{
-			public void step(SimState state) { pacman.resetAgents(); }
+			public void step(SimState state) { pacman.saveEnvironment(sensor.sensEnv); pacman.resetAgents();}
 		});
 	}
 }

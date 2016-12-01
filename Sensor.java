@@ -169,13 +169,13 @@ public class Sensor {
 
 
 		if (vision == 1) {
-			if (umfeld[positionPacX][positionPacY - vision] == 1) { // we have a wall
+			if (umfeld[(int) location.x][(int) location.y] == 1) { // we have a wall
 				//save in an Array, that the spot is unsteppable	
-				sensEnv [positionPacX] [positionPacY - vision] = 1;
+				sensEnv [(int) location.x][(int) location.y] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacX] [positionPacY - vision] = 2;
+			sensEnv [(int) location.x][(int) location.y] = 2;
 				
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.
@@ -223,13 +223,13 @@ public class Sensor {
 		}
 
 		if (vision == 1) {
-			if (umfeld[(int) location.x][positionPacY] == 1) { // we have a wall
+			if (umfeld[(int) location.x][(int) location.y] == 1) { // we have a wall
 				//save in an Array, that the spot is unsteppable	
-				sensEnv [(int) location.x] [positionPacY] = 1;
+				sensEnv [(int) location.x][(int) location.y] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [(int) location.x] [positionPacY] = 2;
+			sensEnv [(int) location.x][(int) location.y] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location	
 			// first check for the dots - they are the most liked by Pac.
@@ -267,14 +267,14 @@ public class Sensor {
 		Double2D location = new Double2D(positionPacX, positionPacY + vision);
 
 		if (vision == 1) {
-			if (umfeld[positionPacX][positionPacY + vision] == 1) { // we have a wall
+			if (umfeld[(int) location.x][(int) location.y] == 1) { // we have a wall
 				//write in an Array, that the spot is unsteppable	
-				sensEnv [positionPacX] [positionPacY + vision] = 1;
+				sensEnv [(int) location.x][(int) location.y] = 1;
 
 			return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [positionPacX] [positionPacY + vision] = 2;
+			sensEnv [(int) location.x][(int) location.y] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.
@@ -325,13 +325,13 @@ public class Sensor {
 		}
 
 		if (vision == 1) {
-			if (umfeld[(int) location.x][positionPacY] == 1) { // we have a wall
+			if (umfeld[(int) location.x][(int) location.y] == 1) { // we have a wall
 				//save in an Array, that the spot is steppable	(if we don't have a wall)
-				sensEnv [(int) location.x] [positionPacY] = 1;
+				sensEnv [(int) location.x][(int) location.y] = 1;
 				return result = 0.0;
 			}
 			//If there's no wall in this direction save it in an Array.
-			sensEnv [(int) location.x] [positionPacY] = 2;
+			sensEnv [(int) location.x][(int) location.y] = 2;
 			
 			// if we don't have a wall, check for coins at the specified location
 			// first check for the dots - they are the most liked by Pac.

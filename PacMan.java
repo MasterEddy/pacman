@@ -24,6 +24,9 @@ public class PacMan extends SimState
     {
     private static final long serialVersionUID = 1;
 
+    /** Holds the saved environment for Pac when he dies. */
+    public int[][] sensEnv = new int [28] [35];
+    
     /** Holds the ghosts and the Pac. */
     public Continuous2D agents;
         
@@ -94,6 +97,13 @@ public class PacMan extends SimState
     /** Resets the game board.  Doesn't change the score or deaths or level number */
     public void resetGame()
         {
+    	// Reset Pac's sensor information
+    	for (int i = 0; i < sensEnv.length; i++) {
+    		for (int j = 0; j < sensEnv.length; j++) {
+    			sensEnv[i][j] = 0;
+    		}
+    	}
+    	
         dots.clear();
                 
         //String mazefile = PacMan.class.getResource("images/maze" + (level - 1) % MAX_MAZES + ".pbm").getPath();
@@ -138,10 +148,24 @@ public class PacMan extends SimState
         return best;
         }
         
-        
+    
+    /**
+     * Method to save Pac's environment information. Used before resetting the level.
+     * 
+     * @param env Pac's collected information until this point.
+     */
+    public void saveEnvironment(int[][] env) {
+    	for (int i = 0; i < env.length; i++) {
+    		for (int j = 0; j < env.length; j++) {
+    			sensEnv[i][j] = env [i][j];
+    		}
+    	}
+    }
+    
+    
     /** Puts the agents back to their regular locations, and clears the schedule.  */
     public void resetAgents()
-        {
+        {    	
         agents.clear();
         schedule.clear();
 
@@ -150,8 +174,8 @@ public class PacMan extends SimState
         pacs = new Pac[1];  // set this to Pac[1] to make this one-player
 
         // add the Pacs
-        if (pacs.length > 1) pacs[1] = new Pac(this,  1);  // schedule pac 1 first so he appears on the bottom initially
-        pacs[0] = new Pac(this,  0);
+        if (pacs.length > 1) pacs[1] = new Pac(this,  1, sensEnv);  // schedule pac 1 first so he appears on the bottom initially
+        pacs[0] = new Pac(this,  0, sensEnv);
 
         // add Blinky
         // yes, dead store
