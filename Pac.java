@@ -176,7 +176,7 @@ public class Pac extends Agent implements Steppable
 		// If Pac's Position is even getToGo gets executed
 		else if (positionPacY % 1.0 == 0 && positionPacX % 1.0 == 0.0){
 			nextAction = getToGo();
-		} else if (sensor.callcheckforGhosts()){
+		} else if (sensor.callCheckforGhosts()){
 			nextAction = getToGo();
 		} else {
 			nextAction = lastAction;
@@ -254,7 +254,7 @@ public class Pac extends Agent implements Steppable
 
 		//if Pac has only Paths without Coins around him, we'll check, if there is any Path worth exploring
 		//We have to check if MaxValue is smaller than 1.1 because we get as a "random number" too often number 1 --> Check the while loop with Math.random 
-		if (maxValue < 1.1 && sensor.callcheckforGhosts() == false){
+		if (maxValue < 1.1 && sensor.callCheckforGhosts() == false){
 			if (forcePacToGoNorth()){
 				preferredWay[0] = 2.0;
 		}
