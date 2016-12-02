@@ -85,8 +85,12 @@ public class Sensor {
 	 * @param positionPacX
 	 */
 	public void setPositionPacX(double positionPacX) {
-		positionPacX = Math.round(positionPacX);
-		this.positionPacX = (int) positionPacX;
+		if (positionPacX > 26.4) {
+			this.positionPacX = 0;
+		} else {
+			positionPacX = Math.round(positionPacX);
+			this.positionPacX = (int) positionPacX;
+		}
 	}
 
 	
@@ -197,7 +201,7 @@ public class Sensor {
 		// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
 		// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
 		Pac pac = pacman.pacs[0];
-		Double2D location = new Double2D ((double) Math.round(pac.positionPacX), (double) Math.round(pac.positionPacY - (double) vision));
+		Double2D location = new Double2D (positionPacX, positionPacY);
 
 
 		if (vision == 1) {
@@ -251,10 +255,7 @@ public class Sensor {
 		} else if ( positionPacX == 27 && vision == 2) {
 			location = new Double2D(1.0, positionPacY);
 		} else {
-			// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
-			// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
-			Pac pac = pacman.pacs[0];
-			location = new Double2D ((double) Math.round(pac.positionPacX + (double) vision), (double) Math.round(pac.positionPacY));
+			location = new Double2D (positionPacX, positionPacY);
 
 		}
 
