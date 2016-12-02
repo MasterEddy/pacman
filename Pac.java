@@ -15,6 +15,8 @@ import sim.util.Double2D;
 
 public class Pac extends Agent implements Steppable
 {
+	int countedSteps;
+	
 	private static final long serialVersionUID = 1;
 
 	/** How long we wait while the Pac dies (not spinning). */
@@ -60,46 +62,99 @@ public class Pac extends Agent implements Steppable
 	public Double2D getStartLocation() { return new Double2D(pacStartX, pacStartY); }
 
 	// Here we will check, if there are undiscovered Fields in Pacs column
-	public boolean forcePacToGo (){
-	
+	public boolean forcePacToGoNorth (){
 		boolean result = false;
 		int [][] sensEnv = sensor.getSensEnv();
 		sensor.getPositionPacX();
 		sensor.getPositionPacY();
 		
-		//REPORT
+		int positionPacXInt = (int)positionPacX;
+		int positionPacYInt = (int)positionPacY;		
 		
-				int xx = 0;
-				int yy = 0;
-				
-				while (yy < 35){
-					while (xx < 28){
-						System.out.print(sensEnv[xx][yy]);
-						xx++;
-					}
-				System.out.println();
-				xx=0;
-				yy++;
-				}
-			System.out.println("________________");
-				
-				
-					
-					
-		///REPORT
-		
-		int s = (int)positionPacX;
-		int z = (int)positionPacY;		
-		
-		//Check all fields in the south direction and Check, where Pac  
-		//Go down step by step and check, when Pac saw the next Wall, of if he saw an open direction
-		while (z < 34){
-			if (sensEnv[s][z + 1] == 1){
-				return result; //return 4 as direction--> we won't go south because there is a wall before there is an open space
-			} else if (sensEnv [s][z + 1] == 0){
+		//Check all fields in the northern direction  
+		//Iterate through a column step by step and check, if Pac saw a path worth exploring.
+		while (positionPacYInt >= 1){
+			if (sensEnv [positionPacXInt][positionPacYInt - 1] == 0){
 				return result = true;
+			}else if (sensEnv [positionPacXInt][positionPacYInt - 1] == 1){
+				return result;
 			}
-			z++;
+			positionPacYInt--;
+		}
+		return result;
+	}
+	
+	// Here we will check, if there are undiscovered Fields in Pacs row
+		public boolean forcePacToGoEast (){
+			
+			boolean result = false;
+			int [][] sensEnv = sensor.getSensEnv();
+			sensor.getPositionPacX();
+			sensor.getPositionPacY();
+			
+			int positionPacXInt = (int)positionPacX;
+			int positionPacYInt = (int)positionPacY;		
+			
+			//Check all fields in the eastern direction  
+			//Iterate through a row step by step and check, if Pac saw a path worth exploring.
+			while (positionPacXInt < 27){
+				if (sensEnv [positionPacXInt + 1][positionPacYInt] == 0){
+					return result = true;
+				}else if (sensEnv [positionPacXInt + 1][positionPacYInt] == 1){
+					return result;
+				}
+				positionPacXInt++;
+			}
+			
+			return result;
+		}
+	
+	
+	// Here we will check, if there are undiscovered Fields in Pacs column
+	public boolean forcePacToGoSouth (){
+		
+		boolean result = false;
+		int [][] sensEnv = sensor.getSensEnv();
+		sensor.getPositionPacX();
+		sensor.getPositionPacY();
+		
+		int positionPacXInt = (int)positionPacX;
+		int positionPacYInt = (int)positionPacY;		
+		
+		//Check all fields in the southern direction  
+		//Iterate through a column step by step and check, if Pac saw a path worth exploring.
+		while (positionPacYInt < 34){
+			if (sensEnv [positionPacXInt][positionPacYInt + 1] == 0){
+				return result = true;
+			}else if (sensEnv [positionPacXInt][positionPacYInt + 1] == 1){
+				return result;
+			}
+			positionPacYInt++;
+		}
+		
+		return result;
+	}
+	
+	// Here we will check, if there are undiscovered Fields in Pacs row
+	public boolean forcePacToGoWest (){
+		
+		boolean result = false;
+		int [][] sensEnv = sensor.getSensEnv();
+		sensor.getPositionPacX();
+		sensor.getPositionPacY();
+		
+		int positionPacXInt = (int)positionPacX;
+		int positionPacYInt = (int)positionPacY;		
+		
+		//Check all fields in the eastern direction  
+		//Iterate through a row step by step and check, if Pac saw a path worth exploring.
+		while (positionPacXInt > 0){
+			if (sensEnv [positionPacXInt - 1][positionPacYInt] == 0){
+				return result = true;
+			}if (sensEnv [positionPacXInt - 1][positionPacYInt] == 1){
+				return result;
+			}
+			positionPacXInt--;
 		}
 		
 		return result;
@@ -110,6 +165,7 @@ public class Pac extends Agent implements Steppable
 	 */
 	protected void doPolicyStep(SimState state)
 	{	
+		
 		sensor.setPositionPacX(positionPacX);
 		sensor.setPositionPacY(positionPacY);		
 		
@@ -117,16 +173,10 @@ public class Pac extends Agent implements Steppable
 		if (positionPacX == 13.5 && positionPacY == 25.0){
 			nextAction = getToGo();
 		}
-		// If Pac stands in a columm, where he recognized a steppable Path, but he didn't chose this one (So in the 
-		// sensEnv Array follows a 0 after the 2).
-		// We force Pac to walk in this direction
-//		else if (forcePacToGo()){
-//			nextAction = 2; //We force Pac to go north, because the next undiscovered Path is in the northern direction..
-//			System.out.println("We'll explore the south!");
-//		}
-
 		// If Pac's Position is even getToGo gets executed
 		else if (positionPacY % 1.0 == 0 && positionPacX % 1.0 == 0.0){
+			nextAction = getToGo();
+		} else if (sensor.callcheckforGhosts()){
 			nextAction = getToGo();
 		} else {
 			nextAction = lastAction;
@@ -202,6 +252,36 @@ public class Pac extends Agent implements Steppable
 			i++;
 		}
 
+		//if Pac has only Paths without Coins around him, we'll check, if there is any Path worth exploring
+		//We have to check if MaxValue is smaller than 1.1 because we get as a "random number" too often number 1 --> Check the while loop with Math.random 
+		if (maxValue < 1.1 && sensor.callcheckforGhosts() == false){
+			if (forcePacToGoNorth()){
+				preferredWay[0] = 2.0;
+		}
+			if (forcePacToGoEast()){
+				preferredWay[1] = 2.0;
+			}
+			if (forcePacToGoSouth()){
+				preferredWay[2] = 2.0;
+			}
+			if (forcePacToGoWest()){
+				preferredWay[3] = 2.0;
+			}
+			// Gets the index of the highest number in the array a.k.a. our preferred way.
+			// Because we had changes in the array regarding the unexplored Paths, we have to check for the direction again
+			maxValue = 0.0;
+			richtIndex = 0;
+			i = 0;
+
+			while (i < preferredWay.length) {
+				if (preferredWay[i] > maxValue) {
+					maxValue = preferredWay[i];
+					richtIndex = i;
+				}
+				i++;
+			}
+		}
+		
 		// standard: path is safe to go.
 		// check for vision = 2 in order to check if there's a ghost coming.
 		double richtRes = 1.0;
@@ -245,6 +325,7 @@ public class Pac extends Agent implements Steppable
 	 */
 	public void step(SimState state)
 	{
+		countedSteps++;
 		doPolicyStep(state);
 		// now maybe we eat a dot or energizer...
 
@@ -308,6 +389,8 @@ public class Pac extends Agent implements Steppable
 							{
 						public void step(SimState state)
 						{ 
+							//Protocol of Pacs deaths, Steps and Score.
+							System.out.println("Anzahl Tode: "+pacman.deaths+" | Anazhl Steps/Ticks: "+countedSteps+" | Gesammelte Punkte in der letzten Runde: "+pacman.score);
 							die();
 						}
 							});  // the ghosts move a bit more

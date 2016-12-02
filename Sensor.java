@@ -48,6 +48,28 @@ public class Sensor {
 		return sensEnv;
 	}
 
+	
+	public boolean callcheckforGhosts (){
+		boolean result = false;
+		int vision = 1;
+		Double2D location = new Double2D(positionPacX, positionPacY - vision);
+		if (checkForGhosts(location)){
+			result = true;
+		}
+		location = new Double2D(positionPacX, positionPacY + vision);
+		if (checkForGhosts(location)){
+			result = true;
+		}
+		location = new Double2D(positionPacX + vision, positionPacY);
+		if (checkForGhosts(location)){
+			result = true;
+		}
+		location = new Double2D(positionPacX - vision, positionPacY);
+		if (checkForGhosts(location)){
+			result = true;
+		}
+		return result;
+	}
 
 	/**
 	 * Function for updating the X position of the Pac for the Sensor.
