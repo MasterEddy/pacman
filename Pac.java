@@ -263,7 +263,7 @@ public class Pac extends Agent implements Steppable
 			}
 			i++;
 		}
-
+		
 		//if Pac has only Paths without Coins around him, we'll check, if there is any Path worth exploring
 		//We have to check if MaxValue is smaller than 1.1 because we get as a "random number" too often number 1 --> Check the while loop with Math.random 
 		if (maxValue < 1.1 && sensor.callCheckforGhosts() == false){
@@ -302,16 +302,16 @@ public class Pac extends Agent implements Steppable
 		int [][] sensEnv = sensor.getSensEnv();
 		
 //Defines the Borders of our quarters		X		Y
-		int [][] quarterOL = new int [][] {{1,13},{3,16}};
-		int [][] quarterOR = new int [][] {{14,26},{3,16}};
-		int [][] quarterUL = new int [][] {{1,13},{14,28}};
-		int [][] quarterUR = new int [][] {{14,26},{14,28}};
+		int [][] quarterOL = new int [][] {{0,13},{0,16}};
+		int [][] quarterOR = new int [][] {{14,27},{0,16}};
+		int [][] quarterUL = new int [][] {{0,13},{17,34}};
+		int [][] quarterUR = new int [][] {{14,27},{17,34}};
 		
 		int row = quarterOL[0][0]; //Starting row for our counting mission
 		int column = quarterOL [1][0]; //Starting column for our counting mission
 		
 		//we have to think about those 17 fields, which can't get a 1 or a 2, because Pac can't see them
-		int countzerosinOL = 0 - 17;
+		int countzerosinOL = 0;
 		
 		//Count the amount of 0's in the upper left quarter
 		while ( row <= quarterOL[0][1] ){ //While row is smaller than our max Border of the chosen quarter
@@ -329,7 +329,7 @@ public class Pac extends Agent implements Steppable
 		column = quarterOR [1][0]; //Starting column for our counting mission
 		
 		//we have to think about those 17 fields, which can't get a 1 or a 2, because Pac can't see them
-		int countzerosinOR = 0 - 17;
+		int countzerosinOR = 0;
 		
 		//Count the amount of 0's in the upper left quarter
 		while ( row <= quarterOR[0][1] ){ //While row is smaller than our max Border of the chosen quarter
@@ -347,7 +347,7 @@ public class Pac extends Agent implements Steppable
 		column = quarterUL [1][0]; //Starting column for our counting mission
 		
 		//we have to think about those 12 fields, which can't get a 1 or a 2, because Pac can't see them
-		int countzerosinUL = 0 - 12;
+		int countzerosinUL = 0;
 		
 		//Count the amount of 0's in the upper left quarter
 		while ( row <= quarterUL[0][1] ){ //While row is smaller than our max Border of the chosen quarter
@@ -364,7 +364,7 @@ public class Pac extends Agent implements Steppable
 		row = quarterUR[0][0]; //Starting row for our counting mission
 		column = quarterUR [1][0]; //Starting column for our counting mission
 		//we have to think about those 12 fields, which can't get a 1 or a 2, because Pac can't see them
-		int countzerosinUR = 0 - 12;
+		int countzerosinUR = 0;
 		
 		//Count the amount of 0's in the upper left quarter
 		while ( row <= quarterUR[0][1] ){ //While row is smaller than our max Border of the chosen quarter
@@ -404,22 +404,47 @@ public class Pac extends Agent implements Steppable
 		
 		if ( mostVIPquarter == 0 ){
 			destination [0] = quarterOL[0][0];	//Set the target coordinates to the Spot, which is on the Border of our quarter
-			destination [1] = quarterOL[1][0];
+			destination [1] = quarterOL[1][0];	//destination[0] is the target x-coordinate - destination[1] the target y-coordinate
 		} else if ( mostVIPquarter == 1 ){
-			destination [0] = quarterOR[0][0];	//Set the target coordinates to the Spot, which is on the Border of our quarter
-			destination [1] = quarterOR[1][0];
+			destination [0] = quarterOR[0][1];	//Set the target coordinates to the Spot, which is on the Border of our quarter
+			destination [1] = quarterOR[1][0];	//destination[0] is the target x-coordinate - destination[1] the target y-coordinate
 		} else if ( mostVIPquarter == 2 ){
 			destination [0] = quarterUL[0][0];	//Set the target coordinates to the Spot, which is on the Border of our quarter
-			destination [1] = quarterUL[1][0];
+			destination [1] = quarterUL[1][1];	//destination[0] is the target x-coordinate - destination[1] the target y-coordinate
 		} else if ( mostVIPquarter == 3 ){
-			destination [0] = quarterOR[0][0];	//Set the target coordinates to the Spot, which is on the Border of our quarter
-			destination [1] = quarterOR[1][0];
+			destination [0] = quarterOR[0][1];	//Set the target coordinates to the Spot, which is on the Border of our quarter
+			destination [1] = quarterOR[1][1];	//destination[0] is the target x-coordinate - destination[1] the target y-coordinate
 		}
 		
-		//Now, that we have our destination, we check pacs position and 
+		//Now, that we have our destination, we check pacs position and give the direction, we previously chose a bonus or a malus.
+		
+		System.out.println(destination[0]+" "+destination[1]);
+		if (positionPacX > destination [0] ){ // if PAC stands in the east of his target coordinate, the western direction gets a bonus.
+			preferredWay[3] = preferredWay [3] + 0.5;
+		} 
+		if (positionPacX < destination [0] ){ // if PAC stands in the west of his target coordinate, the eastern direction gets a bonus.
+			preferredWay[1] = preferredWay [1] + 0.5;
+		}
+		if (positionPacY > destination [1] ){ // if PAC stands in the south of his target coordinate, the northern direction gets a bonus.
+			preferredWay[0] = preferredWay [0] + 0.5;
+		}
+		if (positionPacY < destination [1] ){ // if PAC in the north of his target coordinate, the southern direction gets a bonus.
+			preferredWay[2] = preferredWay [2] + 0.5;
+		}
 		
 		
-		
+		// Gets the index of the highest number in the array a.k.a. our preferred way.
+		maxValue = 0.0;
+		richtIndex = 0;
+		i = 0;
+
+		while (i < preferredWay.length) {
+			if (preferredWay[i] > maxValue) {
+				maxValue = preferredWay[i];
+				richtIndex = i;
+			}
+			i++;
+		}
 		
 		// standard: path is safe to go.
 		// check for vision = 2 in order to check if there's a ghost coming.
