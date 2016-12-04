@@ -42,6 +42,10 @@ public class PacMan extends SimState
     /** The number of deaths so far. */
     public int deaths = 0;
         
+    public int countedSteps = 0;
+    
+    public int levelsWon = 0;
+    
     /** The current level.  */
     public int level = 1;
         

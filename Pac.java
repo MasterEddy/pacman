@@ -190,6 +190,7 @@ public class Pac extends Agent implements Steppable
 	 */
 	public void step(SimState state)
 	{
+		pacman.countedSteps++;
 		doPolicyStep(state);
 		// now maybe we eat a dot or energizer...
 
@@ -227,6 +228,15 @@ public class Pac extends Agent implements Steppable
 						{
 					public void step(SimState state)
 					{ 
+						System.out.println("### Level won!");
+						pacman.levelsWon++;
+						System.out.println("### Levels won: " + pacman.levelsWon);
+						
+						if (pacman.levelsWon >= 500) {
+							System.out.println("End of 500 simulations reached. Stopping.");
+							System.exit(0);
+						}
+						
 						resetLevel();
 					}
 						});  // the Ghosts move a bit more
@@ -253,6 +263,8 @@ public class Pac extends Agent implements Steppable
 							{
 						public void step(SimState state)
 						{ 
+							System.out.println("Anzahl Tode: " + pacman.deaths +  " | Gesammelte Punkte: " + pacman.score 
+									+ " | Anzahl Steps: " + pacman.countedSteps);
 							die();
 						}
 							});  // the ghosts move a bit more
