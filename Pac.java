@@ -16,9 +16,7 @@ import sim.util.Double2D;
 /* The Pac is the Pac Man in the game.  Pac is an Agent and is also Steppable.  The Pac moves first, then the ghosts. */
 
 public class Pac extends Agent implements Steppable
-{
-	int countedSteps;
-	
+{	
 	private static final long serialVersionUID = 1;
 
 	/** How long we wait while the Pac dies (not spinning). */
@@ -470,7 +468,7 @@ public class Pac extends Agent implements Steppable
 	 */
 	public void step(SimState state)
 	{
-		countedSteps++;
+		pacman.countedSteps++;
 		doPolicyStep(state);
 		// now maybe we eat a dot or energizer...
 
@@ -508,6 +506,14 @@ public class Pac extends Agent implements Steppable
 						{
 					public void step(SimState state)
 					{ 
+						System.out.println("### Level won!");
+						pacman.levelsWon++;
+						System.out.println("### Levels won: " + pacman.levelsWon);
+
+						if (pacman.levelsWon >= 500) {
+							System.out.println("End of 500 simulations reached. Stopping.");
+							System.exit(0);
+						}
 						resetLevel();
 					}
 						});  // the Ghosts move a bit more
@@ -535,7 +541,8 @@ public class Pac extends Agent implements Steppable
 						public void step(SimState state)
 						{ 
 							//Protocol of Pacs deaths, Steps and Score.
-							System.out.println("Anzahl Tode: "+pacman.deaths+" | Anazhl Steps/Ticks: "+countedSteps+" | Gesammelte Punkte in allen Runden: "+pacman.score);
+							System.out.println("Anzahl Tode: " + pacman.deaths +  " | Gesammelte Punkte: " + pacman.score 
+									+ " | Anzahl Steps: " + pacman.countedSteps);
 							die();
 						}
 							});  // the ghosts move a bit more

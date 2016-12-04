@@ -50,6 +50,10 @@ public class PacMan extends SimState
         
     /** The current score. */
     public int score=0;
+    
+    public int countedSteps = 0;
+    
+    public int levelsWon = 0;
 
     /** The pacs.  Used by the ghosts to figure out where the closest Pac is. */
     public Pac[] pacs;      
