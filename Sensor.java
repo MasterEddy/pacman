@@ -16,7 +16,7 @@ public class Sensor {
 	public IntGrid2D maze;
 	public Continuous2D dots;
 	public Continuous2D agents;
-	
+
 	public int[][] umfeld;
 	public int positionPacX;
 	public int positionPacY;
@@ -195,6 +195,11 @@ public class Sensor {
 	 * 			likely Pac is going to go there.
 	 */
 	public Double getNorth(int vision) {
+
+//PROTOCOL
+		System.out.println("GetNorth bekommt koordinaten -- X = "+positionPacX+" -- Y = "+positionPacY);
+//PROTOCOL
+		
 		// default case is 1. This means there is just a free path - without coins and without ghosts.
 		Double result = 1.0;
 		

@@ -39,7 +39,7 @@ public class PacManWithUI extends GUIState
         }
 
     /** The desired FPS */
-    public double FRAMES_PER_SECOND = 1000;
+    public double FRAMES_PER_SECOND = 60;
         
 
     /** Creates a SimpleController and starts it playing. */

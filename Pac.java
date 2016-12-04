@@ -115,7 +115,6 @@ public class Pac extends Agent implements Steppable
 			return result;
 		}
 	
-	
 	// Here we will check, if there are undiscovered Fields in Pacs column
 	public boolean forcePacToGoSouth (){
 		
@@ -212,6 +211,11 @@ public class Pac extends Agent implements Steppable
 	 *   returns 0 for north, 1 for east, 2 for south, 3 for west.
 	 */
 	private int getToGo() {
+		
+//PROTOCOL
+		System.out.println("getToGo beginnt");
+//PROTOCOL
+		
 		// First, let's check with vision = 1
 		int vision = 1;
 		// Reset array for the values of the sensor check
@@ -222,6 +226,10 @@ public class Pac extends Agent implements Steppable
 		preferredWay[1] = sensor.getEast(vision);
 		preferredWay[2] = sensor.getSouth(vision);
 		preferredWay[3] = sensor.getWest(vision);
+	
+//PROTOCOL
+		System.out.println("Preferredway array gibt = "+preferredWay[0]+""+preferredWay[1]+""+preferredWay[2]+""+preferredWay[3]);
+//PROTOCOL
 		
 		// Randomizes the values in the array with a number from 0.51 to 1 in order to shuffle the possibilities.
 		// By cutting the range of possible random numbers, Pac will always choose a path with Coins if he can.
@@ -232,6 +240,11 @@ public class Pac extends Agent implements Steppable
 			preferredWay[i] = preferredWay[i] * rdm;
 			i++;
 		}
+
+//PROTOCOL
+		System.out.println("Preferredway array RANDOMIZED gibt = "+preferredWay[0]+""+preferredWay[1]+""+preferredWay[2]+""+preferredWay[3]);
+//PROTOCOL
+		
 		
 		// Counts how many possible ways Pac has. If there are only 2, Pac will continue 
 		// walking in the previously chosen direction until he gets to a spot, where he can't walk through.
@@ -420,16 +433,16 @@ public class Pac extends Agent implements Steppable
 		
 		System.out.println(destination[0]+" "+destination[1]);
 		if (positionPacX > destination [0] ){ // if PAC stands in the east of his target coordinate, the western direction gets a bonus.
-			preferredWay[3] = preferredWay [3] + 0.5;
+			preferredWay[3] = preferredWay [3] + 0.15;
 		} 
 		if (positionPacX < destination [0] ){ // if PAC stands in the west of his target coordinate, the eastern direction gets a bonus.
-			preferredWay[1] = preferredWay [1] + 0.5;
+			preferredWay[1] = preferredWay [1] + 0.15;
 		}
 		if (positionPacY > destination [1] ){ // if PAC stands in the south of his target coordinate, the northern direction gets a bonus.
-			preferredWay[0] = preferredWay [0] + 0.5;
+			preferredWay[0] = preferredWay [0] + 0.15;
 		}
 		if (positionPacY < destination [1] ){ // if PAC in the north of his target coordinate, the southern direction gets a bonus.
-			preferredWay[2] = preferredWay [2] + 0.5;
+			preferredWay[2] = preferredWay [2] + 0.15;
 		}
 		
 		
