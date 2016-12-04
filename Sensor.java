@@ -206,7 +206,7 @@ public class Sensor {
 		// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
 		// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
 		Pac pac = pacman.pacs[0];
-		Double2D location = new Double2D (positionPacX, positionPacY);
+		Double2D location = new Double2D (positionPacX, positionPacY - vision);
 
 
 		if (vision == 1) {
@@ -260,7 +260,7 @@ public class Sensor {
 		} else if ( positionPacX == 27 && vision == 2) {
 			location = new Double2D(1.0, positionPacY);
 		} else {
-			location = new Double2D (positionPacX, positionPacY);
+			location = new Double2D (positionPacX + vision, positionPacY);
 
 		}
 
@@ -307,10 +307,7 @@ public class Sensor {
 		// default case is 1. This means there is just a free path - without coins and without ghosts.
 		Double result = 1.0;
 		
-		// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
-		// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
-		Pac pac = pacman.pacs[0];
-		Double2D location = new Double2D ((double) Math.round(pac.positionPacX), (double) Math.round(pac.positionPacY + (double) vision));
+		Double2D location = new Double2D (positionPacX, positionPacY + vision);
 
 		if (vision == 1) {
 			if (umfeld[(int) location.x][(int) location.y] == 1) { // we have a wall
@@ -368,11 +365,6 @@ public class Sensor {
 			location = new Double2D(maze.getWidth() - 2, positionPacY);
 		} else {
 			location = new Double2D(positionPacX - vision, positionPacY);
-			// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
-			// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
-			Pac pac = pacman.pacs[0];
-			location = new Double2D ((double) Math.round(pac.positionPacX - (double) vision), (double) Math.round(pac.positionPacY));
-
 		}
 
 		if (vision == 1) {
