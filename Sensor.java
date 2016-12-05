@@ -33,22 +33,40 @@ public class Sensor {
 
 
 	
+	/**
+	 * Local instance of PacMan so that we can access relevant attributes and methods.
+	 */
 	PacMan pacman;
 	
-	
-	//This Array stores the perceptions of Pac's Sensor.
-	//It only stores if space around Pac was steppable or not. 
-	//No Coins are observed.
-	//0 = the spot hasn't been discovered yet ---- 1 = There was a wall at this spot ----- 2 = There was a Steppable Path
-	//because of the header and footer of the maze, the relevant informtion about the maze is stored in the rows (X-dimension) 3 - 31
-	//At the Moment (24.11.16) the Array loses the stored Information, when Pac gets killed
+	/**
+	 * This array stores the perceptions of Pac's sensor. It only stores if the space around Pac was steppable
+	 * or not. No coins are observed.
+	 * 0 = The spot hasn't been discovered yet.
+	 * 1 = There was a wall at this spot.
+	 * 2 = There was a steppable path.
+	 * 
+	 * Because of the header and footer of the game, relevant information about the maze is stored in the rows (X-dimension) 3 to 31.
+	 * Pac's information about the maze is being transferred into his "next life". Only when he finishes the game it gets deleted.
+	 * 
+	 */
 	public int [][] sensEnv = new int [28] [35];
 	
+	/**
+	 * Get the array with Pac's sensor information.
+	 * 
+	 * @return The sensor array.
+	 */
 	public int[][] getSensEnv() {
 		return sensEnv;
 	}
 
 	
+	/**
+	 * Used to check for ghosts in Pac's vicinity. This gets called in every step so that Pac
+	 * is less likely to die from his own "blindness".
+	 * 
+	 * @return
+	 */
 	public boolean callCheckforGhosts (){
 		boolean result = false;
 		int vision = 1;
@@ -81,6 +99,7 @@ public class Sensor {
 
 	/**
 	 * Function for updating the X position of the Pac for the Sensor.
+	 * The X-position gets rounded instantly for the sensor class.
 	 * 
 	 * @param positionPacX
 	 */
@@ -96,6 +115,7 @@ public class Sensor {
 	
 	/**
 	 * Function for updating the Y position of the Pac for the Sensor.
+	 * The Y-position gets rounded instantly for the sensor class.
 	 * 
 	 * @param positionPacY
 	 */
@@ -107,6 +127,8 @@ public class Sensor {
 	/**
 	 * Creates a new sensor instance for the Pac. With it, we can give the sensor the needed information to check
 	 * the surroundings of Pac.
+	 * Get information about the maze, the ghosts and the dots in order to extract information out of it
+	 * while running around.
 	 * 
 	 * @param pacman
 	 */
@@ -160,7 +182,7 @@ public class Sensor {
 		Bag nearby = null;
 		// Get the bad boys into this bag in order to iterate through them. But only get those who
 		// are in distance of 0.3 (see Pac.java - they use it to locate ghosts at a certain point).
-//CHANGE 25.11.16 -- distance changed to 0.5		
+		// CHANGE 25.11.16 -- distance changed to 0.5		
 		nearby = agents.getNeighborsWithinDistance(new Double2D(loc), 0.5);
 
 		for (int i = 0; i < nearby.numObjs; i++) {
@@ -198,9 +220,6 @@ public class Sensor {
 		// default case is 1. This means there is just a free path - without coins and without ghosts.
 		Double result = 1.0;
 		
-		// New location in order to check one or two fields above Pac. Additionally, round the numbers according to
-		// the new rules. Round everything below 0.5 down, everything that equals or greater 0.5 up!
-		Pac pac = pacman.pacs[0];
 		Double2D location = new Double2D (positionPacX, positionPacY - vision);
 
 
