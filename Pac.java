@@ -5,8 +5,6 @@
  */
 
 package sim.app.pacman;
-import javax.security.auth.callback.CallbackHandler;
-
 import sim.engine.SimState;
 import sim.engine.Steppable;
 import sim.engine.Stoppable;
@@ -40,13 +38,15 @@ public class Pac extends Agent implements Steppable
 	/** The stoppable for this Pac so he can remove himself when he dies if it's multiplayer */
 	public Stoppable stopper;
 	
-	//Instance of Sensor
+	// Instance of Sensor
 	Sensor sensor;
 	
-	//nextAction has to be available for getToGo Method
+	// nextAction has to be available for getToGo Method
 	public int nextAction;
 
-	/** Creates a Pac assigned to the given tag, puts him in pacman.agents at the start location, and schedules him on the schedule. */
+	/** Creates a Pac assigned to the given tag, puts him in pacman.agents at the start location, and schedules him on the schedule.
+	 * Additionally, Pac gets his information of the sensor of his "last life". 
+	 */
 	public Pac(PacMan pacman, int tag, int[][] env) 
 	{
 		super(pacman);
@@ -65,12 +65,13 @@ public class Pac extends Agent implements Steppable
 	/**
 	 * We implemented forcePacToGoNorth in order to get him faster out of spots, where we can't find any coins.
 	 * The method forcePacToGo is implemented for every possible direction.
-	 * Those methods, which are called in the getToGo-method, check Pac's perceptions from the past (which are documented in the array 'senEnv').
-	 * To be more precise, they check the row or column, in which Pac stands, and check, if Pac saw a space, which is marked as unexplored.
+	 * Those methods, which are called in the getToGo-method, check Pac's perceptions from the past (which are documented in the array 'sensEnv').
+	 * To be more precise: they look up the row or column in which Pac stands and check if Pac saw a space which is marked as unexplored (i.e. if there's a 0).
 	 * The array sensEnv is set to 0 by default, so if Pac sees a wall or a path, he marks a wall with 1 and a path with 2.
-	 * This helps us to read pacs momories. E. g. when Pac stands in a column, where he has no coins around him, he checks, if a 1 or a 0 comes next in his column in the direction of the method.
-	 * If a 0 comes before a 1, forcePacToGo will return true for the relevant direction. otherwise it will return false. 
-	 * @return
+	 * This helps us to read Pac's memories. 
+	 *
+	 * @return E.g. when Pac stands in a column where he has no coins around him, he checks if a 1 or a 0 comes next in his column in the direction of the method.
+	 * If a 0 comes before a 1, forcePacToGo will return true for the relevant direction. Otherwise it will return false. 
 	 */
 	//Check, if there are undiscovered fields in the northern direction.
 	public boolean forcePacToGoNorth (){
@@ -273,9 +274,9 @@ public class Pac extends Agent implements Steppable
 			i++;
 		}
 
-		//if Pac has only paths without coins around him (maxValue <= 1) and there are no ghosts nearby, we check, if there is any Path worth exploring.
-		//First we'll look for paths Pac saw, which should steppable and where we probably find new coins. 
-		//We will think about those paths like normal Paths with coins (Set the direction in our preferredWay-Array to 2.0).
+		// If Pac has only paths without coins around him (maxValue <= 1) and there are no ghosts nearby, we check if there is any path worth exploring.
+		// First we'll look for paths Pac saw, which are steppable and where we can probably find new coins. 
+		// We will think about those paths like normal Paths with coins (Set the direction in our preferredWay-Array to 2.0).
 		if (maxValue <= 1 && sensor.callCheckforGhosts() == false){
 			if (forcePacToGoNorth()){
 				preferredWay[0] = 2.0;
@@ -372,10 +373,12 @@ public class Pac extends Agent implements Steppable
 						{
 					public void step(SimState state)
 					{ 
+						// Protocol every win in a level.
 						System.out.println("### Level won!");
 						pacman.levelsWon++;
 						System.out.println("### Levels won: " + pacman.levelsWon);
 
+						// Stop after 500 simulations.
 						if (pacman.levelsWon >= 500) {
 							System.out.println("End of 500 simulations reached. Stopping.");
 							System.exit(0);
