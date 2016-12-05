@@ -409,10 +409,10 @@ public class Pac extends Agent implements Steppable
 							{
 						public void step(SimState state)
 						{ 
+							die();
 							//Protocol of Pacs deaths, Steps and Score.
 							System.out.println("Anzahl Tode: " + pacman.deaths +  " | Gesammelte Punkte: " + pacman.score 
 									+ " | Anzahl Steps: " + pacman.countedSteps);
-							die();
 						}
 							});  // the ghosts move a bit more
 				}
