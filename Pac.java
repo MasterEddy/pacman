@@ -129,7 +129,6 @@ public class Pac extends Agent implements Steppable
 
 	//Check, if there are undiscovered fields in Pacs the southern direction.
 	public boolean forcePacToGoSouth (){
-		
 		boolean result = false;
 		int [][] sensEnv = sensor.getSensEnv();
 		sensor.getPositionPacX();
@@ -290,6 +289,19 @@ public class Pac extends Agent implements Steppable
 			if (forcePacToGoWest()){
 				preferredWay[3] = 2.0;
 			}
+		}
+		
+		//We have to get a new richtIndex, because we changed our prefferedWay[] Array.
+		maxValue = 0.0;
+		richtIndex = 0;
+		i = 0;
+
+		while (i < preferredWay.length) {
+			if (preferredWay[i] > maxValue) {
+				maxValue = preferredWay[i];
+				richtIndex = i;
+			}
+			i++;
 		}
 				
 		// standard: path is safe to go.
